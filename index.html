@@ -1,0 +1,524 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Birthday 🎂</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,600&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg1:#ffe4ef; --bg2:#ffc9e0; --bg3:#ffb3d1; --accent:#ff5da2; --accent2:#ffa9cf;
+  --text:#5a1f3d; --card:rgba(255,255,255,.65); --shadow:rgba(255,93,162,.35); --gold:#f6c945;
+}
+html{scroll-behavior:smooth; scroll-padding-top:env(safe-area-inset-top,0px);}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{
+  font-family:'Poppins',system-ui,-apple-system,sans-serif;
+  background:linear-gradient(160deg,var(--bg1),var(--bg2) 45%,var(--bg3));
+  color:var(--text); overflow-x:hidden; min-height:100%;
+  transition:background 1.2s ease, color .8s ease;
+}
+html[data-theme="galaxy"]{
+  --bg1:#0a0b28; --bg2:#171049; --bg3:#241a63; --accent:#a98bff; --accent2:#5fe0ff;
+  --text:#ece9ff; --card:rgba(255,255,255,.08); --shadow:rgba(157,123,255,.5); --gold:#ffe27a;
+}
+html[data-theme="floral"]{
+  --bg1:#eafbe9; --bg2:#c9f0c3; --bg3:#a9e6ac; --accent:#3f9142; --accent2:#f6c945;
+  --text:#1f4a22; --card:rgba(255,255,255,.65); --shadow:rgba(63,145,66,.35); --gold:#f6c945;
+}
+h1,h2,.script{font-family:'Playfair Display',serif;}
+.wrap{position:relative; z-index:2;}
+section{
+  min-height:100vh; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; text-align:center; padding:70px 20px; position:relative;
+}
+.reveal{opacity:0; transform:translateY(40px); transition:opacity .9s ease, transform .9s ease;}
+.reveal.in{opacity:1; transform:translateY(0);}
+h1{font-size:clamp(2.2rem,8vw,4.2rem); margin-bottom:16px; text-shadow:0 6px 26px var(--shadow); letter-spacing:.5px;}
+h2{font-size:clamp(1.6rem,5.5vw,2.6rem); margin-bottom:22px;}
+.eyebrow{font-size:.8rem; letter-spacing:3px; text-transform:uppercase; opacity:.65; margin-bottom:10px;}
+p.sub{max-width:620px; font-size:1.08rem; line-height:1.8; opacity:.9; margin-bottom:28px;}
+.btn{
+  border:none; padding:15px 32px; font-size:1rem; border-radius:50px; cursor:pointer;
+  background:linear-gradient(120deg,var(--accent),var(--accent2)); color:#fff; font-weight:600;
+  box-shadow:0 12px 28px var(--shadow); transition:transform .25s ease, box-shadow .25s ease;
+  margin:8px; letter-spacing:.3px;
+}
+.btn:hover{transform:translateY(-4px) scale(1.03);}
+.btn:active{transform:scale(.96);}
+.btn.ghost{background:transparent; border:2px solid var(--accent); color:var(--text); box-shadow:none;}
+.pill{
+  position:fixed; top:calc(env(safe-area-inset-top,0px) + 16px); z-index:60;
+  padding:10px 18px; border-radius:40px; background:var(--card); color:var(--text);
+  border:1.5px solid var(--accent); font-weight:600; cursor:pointer; font-size:.82rem;
+  box-shadow:0 8px 20px var(--shadow); backdrop-filter:blur(8px);
+}
+#themeBtn{right:14px;} #musicBtn{left:14px;}
+#progressBar{position:fixed; top:0; left:0; height:4px; background:linear-gradient(90deg,var(--accent),var(--gold)); z-index:70; width:0%; transition:width .1s linear;}
+.scene{position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden;}
+.balloon{position:absolute; bottom:-140px; width:46px; height:60px; border-radius:50% 50% 50% 50%/60% 60% 40% 40%; opacity:.85; animation:floatUp linear forwards;}
+.balloon::after{content:""; position:absolute; bottom:-40px; left:50%; width:1px; height:40px; background:rgba(0,0,0,.2);}
+@keyframes floatUp{to{transform:translateY(-125vh) rotate(10deg); opacity:0;}}
+.heart{position:absolute; bottom:-40px; font-size:1.6rem; animation:heartUp linear forwards;}
+@keyframes heartUp{to{transform:translateY(-115vh) translateX(24px) rotate(30deg); opacity:0;}}
+canvas{position:fixed; inset:0; z-index:5; pointer-events:none;}
+#gameCanvas{z-index:8; pointer-events:auto; position:static;}
+
+.glass{background:var(--card); backdrop-filter:blur(14px); border:1px solid rgba(255,255,255,.4); border-radius:26px; box-shadow:0 18px 45px var(--shadow); padding:34px 30px;}
+
+.timer{display:flex; gap:14px; margin:20px 0 30px; flex-wrap:wrap; justify-content:center;}
+.tbox{background:var(--card); backdrop-filter:blur(10px); border-radius:18px; padding:16px 20px; min-width:78px; box-shadow:0 10px 24px var(--shadow); border:1px solid rgba(255,255,255,.4);}
+.tbox b{display:block; font-size:2rem; font-family:'Playfair Display',serif;}
+.tbox span{font-size:.72rem; opacity:.7; letter-spacing:1px;}
+
+.card-area{position:relative; width:min(600px,92vw); min-height:190px; display:flex; align-items:center; justify-content:center;}
+.reveal-card{
+  background:var(--card); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,.4);
+  border-radius:22px; padding:30px 32px; box-shadow:0 16px 38px var(--shadow);
+  font-size:1.18rem; line-height:1.6; opacity:0; transform:translateY(16px) scale(.96);
+  transition:opacity .55s ease, transform .55s ease; position:absolute; width:100%;
+}
+.reveal-card.show{opacity:1; transform:translateY(0) scale(1);}
+.progress{font-size:.8rem; opacity:.7; margin-top:12px; letter-spacing:.5px;}
+
+.cake-wrap{margin:14px 0 24px; filter:drop-shadow(0 20px 30px var(--shadow));}
+.cake{width:240px;}
+.candle{transition:opacity .6s ease;}
+.flame{animation:flicker .5s infinite alternate;}
+@keyframes flicker{from{transform:scale(1) translateY(0);}to{transform:scale(1.18) translateY(-1px);}}
+.blown .flame{opacity:0;}
+
+.letter-box{max-width:560px; text-align:left; font-size:1.05rem; line-height:1.9; white-space:pre-wrap;}
+.letter-cursor{display:inline-block; width:2px; background:var(--text); animation:blink 1s infinite;}
+@keyframes blink{50%{opacity:0;}}
+
+.love-meter{width:min(500px,88vw); margin:20px 0;}
+.love-track{width:100%; height:18px; border-radius:20px; background:rgba(255,255,255,.35); overflow:hidden; box-shadow:inset 0 2px 6px rgba(0,0,0,.15);}
+.love-fill{height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--gold)); transition:width 1.6s cubic-bezier(.2,.8,.2,1); border-radius:20px;}
+.love-label{margin-top:10px; font-weight:600;}
+
+.frames{display:flex; flex-wrap:wrap; gap:20px; justify-content:center; max-width:820px;}
+.frame{width:180px; height:180px; border-radius:18px; background:var(--card); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.4); box-shadow:0 14px 30px var(--shadow); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:14px; font-size:.85rem; opacity:.9;}
+.frame .ic{font-size:2.4rem;}
+
+.score-badge{position:fixed; bottom:calc(env(safe-area-inset-bottom,0px) + 14px); right:14px; z-index:60; background:var(--card); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.4); padding:8px 16px; border-radius:30px; font-weight:600; font-size:.85rem; box-shadow:0 8px 18px var(--shadow);}
+
+.grid-badges{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:14px;}
+.badge{background:var(--card); backdrop-filter:blur(8px); padding:9px 16px; border-radius:30px; font-size:.85rem; box-shadow:0 8px 16px var(--shadow); border:1px solid rgba(255,255,255,.35);}
+
+.tiny{font-size:.8rem; opacity:.55; margin-top:44px;}
+.divider{width:60px; height:2px; background:var(--accent); opacity:.5; margin:22px 0;}
+</style>
+</head>
+<body>
+
+<div id="progressBar"></div>
+<button class="pill" id="themeBtn">🎨 Theme</button>
+<button class="pill" id="musicBtn">🎵 Play tune</button>
+<div class="scene" id="scene"></div>
+<canvas id="confettiCanvas"></canvas>
+<div class="score-badge" id="scoreBadge" style="display:none;">💗 0</div>
+
+<div class="wrap">
+
+<section id="hero">
+  <div class="eyebrow reveal in">a quiet little page, just for one day</div>
+  <h1 class="reveal in">🎉 Happy Birthday 🎉</h1>
+  <p class="sub reveal in" id="typedSub"></p>
+  <div class="timer" id="timer"></div>
+  <button class="btn" onclick="document.getElementById('why').scrollIntoView()">Begin the journey ↓</button>
+</section>
+
+<section id="why">
+  <div class="glass reveal">
+    <div class="eyebrow">reason after reason</div>
+    <h2>A few truths about you</h2>
+    <p class="sub">Tap as many times as you like. There are twenty-five — try to get through them all.</p>
+    <div class="card-area"><div class="reveal-card" id="complimentCard">Tap below to begin ✨</div></div>
+    <button class="btn" id="complimentBtn">Reveal a truth</button>
+    <div class="progress" id="complimentProgress"></div>
+  </div>
+</section>
+
+<section id="jar">
+  <div class="glass reveal">
+    <div class="eyebrow">for the year ahead</div>
+    <h2>🍯 The Wish Jar</h2>
+    <p class="sub">Twenty wishes are sitting in this jar, waiting. Pull one out whenever you're ready.</p>
+    <div class="card-area"><div class="reveal-card" id="wishCard">🫙 The jar is full... go ahead.</div></div>
+    <button class="btn" id="wishBtn">Pull a wish</button>
+    <div class="progress" id="wishProgress"></div>
+  </div>
+</section>
+
+<section id="popgame">
+  <div class="eyebrow reveal in">a small game, no pressure</div>
+  <h2 class="reveal in">Pop the floating hearts 💗</h2>
+  <p class="sub reveal in">Tap the hearts as they drift by. Just something fun to slow down with for a minute.</p>
+  <canvas id="gameCanvas" width="360" height="420" style="max-width:100%; border-radius:24px; background:var(--card); backdrop-filter:blur(10px); box-shadow:0 16px 40px var(--shadow); border:1px solid rgba(255,255,255,.4);"></canvas>
+  <button class="btn ghost" id="resetGame" style="margin-top:16px;">Reset score</button>
+</section>
+
+<section id="meter">
+  <div class="glass reveal">
+    <div class="eyebrow">just to make it official</div>
+    <h2>The Love Meter</h2>
+    <p class="sub">Drag the slider. Spoiler: it always finds its way to the top.</p>
+    <div class="love-meter">
+      <input type="range" min="0" max="100" value="10" id="loveSlider" style="width:100%;">
+      <div class="love-track"><div class="love-fill" id="loveFill"></div></div>
+      <div class="love-label" id="loveLabel">keep dragging...</div>
+    </div>
+  </div>
+</section>
+
+<section id="cake">
+  <div class="eyebrow reveal in">the classic moment</div>
+  <h2 class="reveal in">Make a wish 🌟</h2>
+  <p class="sub reveal in">Blow out the candles. Go on — nobody's watching except this page.</p>
+  <div class="cake-wrap reveal in">
+    <svg class="cake" id="cakeSvg" viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="110" cy="178" rx="95" ry="14" fill="var(--accent2)" opacity=".5"/>
+      <rect x="30" y="120" width="160" height="55" rx="10" fill="var(--accent2)"/>
+      <rect x="30" y="120" width="160" height="14" rx="7" fill="#fff" opacity=".55"/>
+      <circle cx="55" cy="140" r="4" fill="var(--gold)"/><circle cx="90" cy="150" r="4" fill="var(--accent)"/>
+      <circle cx="130" cy="140" r="4" fill="var(--gold)"/><circle cx="165" cy="150" r="4" fill="var(--accent)"/>
+      <rect x="45" y="80" width="130" height="45" rx="10" fill="var(--accent)"/>
+      <rect x="45" y="80" width="130" height="12" rx="6" fill="#fff" opacity=".5"/>
+      <g id="candles">
+        <g class="candle"><rect x="70" y="55" width="8" height="26" fill="#fff8"/><ellipse class="flame" cx="74" cy="50" rx="6" ry="9" fill="#ffd36b"/></g>
+        <g class="candle"><rect x="106" y="50" width="8" height="31" fill="#fff8"/><ellipse class="flame" cx="110" cy="44" rx="6" ry="9" fill="#ffd36b"/></g>
+        <g class="candle"><rect x="142" y="55" width="8" height="26" fill="#fff8"/><ellipse class="flame" cx="146" cy="50" rx="6" ry="9" fill="#ffd36b"/></g>
+      </g>
+    </svg>
+  </div>
+  <button class="btn" id="blowBtn">🎂 Blow the candles</button>
+</section>
+
+<section id="letter">
+  <div class="glass reveal">
+    <div class="eyebrow">something a little longer</div>
+    <h2 class="script">A short letter</h2>
+    <button class="btn ghost" id="letterBtn">Open the letter</button>
+    <div class="divider"></div>
+    <div class="letter-box" id="letterBox"></div>
+  </div>
+</section>
+
+<section id="memories">
+  <div class="eyebrow reveal in">a small collection</div>
+  <h2 class="reveal in">Little things worth celebrating</h2>
+  <p class="sub reveal in">Not photos — just a few frames for the kind of moments you deserve more of.</p>
+  <div class="frames">
+    <div class="frame reveal in"><div class="ic">☀️</div>mornings that go your way</div>
+    <div class="frame reveal in"><div class="ic">📚</div>quiet, unhurried time</div>
+    <div class="frame reveal in"><div class="ic">🎶</div>a song that fits the mood exactly</div>
+    <div class="frame reveal in"><div class="ic">🍰</div>dessert that was actually worth it</div>
+    <div class="frame reveal in"><div class="ic">🌷</div>someone noticing the small things</div>
+    <div class="frame reveal in"><div class="ic">🌙</div>a good night's sleep</div>
+  </div>
+</section>
+
+<section id="party">
+  <h2 class="reveal in">🎊 It's a party!</h2>
+  <p class="sub reveal in">This section just wanted an excuse to throw confetti everywhere. You deserve a whole celebration, not just a page — but this is a start.</p>
+  <div class="grid-badges reveal in">
+    <div class="badge">🥳 Kind</div><div class="badge">💫 Bright</div><div class="badge">🌸 Thoughtful</div>
+    <div class="badge">🔥 Strong</div><div class="badge">🎈 One of a kind</div>
+  </div>
+  <button class="btn" id="burstBtn">More confetti please</button>
+</section>
+
+<section id="close">
+  <div class="glass reveal">
+    <h2 class="script">One last thing 💌</h2>
+    <p class="sub">Whatever today brings, I hope it's soft, warm, and full of things that make you smile.
+    You don't need to know who made this — just know that somewhere, someone is genuinely glad you exist, today and every day.</p>
+    <button class="btn" id="loveBtn">Send love back</button>
+    <button class="btn ghost" onclick="window.scrollTo({top:0,behavior:'smooth'})">Start over from the top</button>
+    <p class="tiny">made quietly, with a lot of care — happy birthday 🎂</p>
+  </div>
+</section>
+
+</div>
+
+<script>
+/* ---------- SCROLL PROGRESS + REVEAL ---------- */
+function onScroll(){
+  const h=document.documentElement;
+  const pct=(h.scrollTop)/(h.scrollHeight-h.clientHeight)*100;
+  document.getElementById('progressBar').style.width=pct+'%';
+}
+window.addEventListener('scroll',onScroll);
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+},{threshold:.15});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---------- TYPEWRITER HERO SUB ---------- */
+const subText="Today (well, tomorrow, but who's counting) the world gets to celebrate someone genuinely wonderful. This little page is a slow, quiet way of saying: you matter more than you probably realize. Take your time here, tap everything. It was made to be explored, not rushed.";
+let si=0;
+function typeSub(){
+  const el=document.getElementById('typedSub');
+  if(si<=subText.length){ el.textContent=subText.slice(0,si); si++; setTimeout(typeSub,18); }
+}
+typeSub();
+
+/* ---------- THEME ---------- */
+const themes=['pink','galaxy','floral']; let ti=0;
+document.getElementById('themeBtn').onclick=()=>{
+  ti=(ti+1)%themes.length;
+  document.documentElement.setAttribute('data-theme', themes[ti]==='pink'?'':themes[ti]);
+};
+
+/* ---------- COUNTDOWN ---------- */
+function nextBday(){
+  const now=new Date(); let y=now.getFullYear();
+  let target=new Date(y,8,26,0,0,0);
+  if(target<now) target=new Date(y+1,8,26,0,0,0);
+  return target;
+}
+function renderTimer(){
+  const diff=nextBday()-new Date();
+  if(diff<=0){document.getElementById('timer').innerHTML='<div class="tbox"><b>🎉</b><span>Its the day!</span></div>';return;}
+  const d=Math.floor(diff/86400000), h=Math.floor(diff/3600000)%24, m=Math.floor(diff/60000)%60, s=Math.floor(diff/1000)%60;
+  document.getElementById('timer').innerHTML=`
+    <div class="tbox"><b>${d}</b><span>days</span></div>
+    <div class="tbox"><b>${h}</b><span>hrs</span></div>
+    <div class="tbox"><b>${m}</b><span>min</span></div>
+    <div class="tbox"><b>${s}</b><span>sec</span></div>`;
+}
+renderTimer(); setInterval(renderTimer,1000);
+
+/* ---------- BALLOONS / HEARTS BACKGROUND ---------- */
+const scene=document.getElementById('scene');
+const colors=['#ff5da2','#ff8fc0','#ffd36b','#9d7bff','#4fd6ff','#3f9142'];
+function spawnBalloon(){
+  const b=document.createElement('div'); b.className='balloon';
+  b.style.left=Math.random()*100+'vw'; b.style.background=colors[Math.floor(Math.random()*colors.length)];
+  const dur=8+Math.random()*6; b.style.animationDuration=dur+'s';
+  scene.appendChild(b); setTimeout(()=>b.remove(),dur*1000+200);
+}
+function spawnHeart(){
+  const h=document.createElement('div'); h.className='heart'; h.textContent='💗';
+  h.style.left=Math.random()*100+'vw'; const dur=7+Math.random()*5; h.style.animationDuration=dur+'s';
+  scene.appendChild(h); setTimeout(()=>h.remove(),dur*1000+200);
+}
+setInterval(spawnBalloon,1500); setInterval(spawnHeart,2300);
+
+/* ---------- CONFETTI ---------- */
+const canvas=document.getElementById('confettiCanvas'); const ctx=canvas.getContext('2d');
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight;}
+resize(); window.addEventListener('resize',resize);
+let particles=[];
+function burstConfetti(n=120){
+  for(let i=0;i<n;i++){
+    particles.push({x:Math.random()*canvas.width,y:-20-Math.random()*100,vx:(Math.random()-.5)*4,vy:2+Math.random()*4,
+      rot:Math.random()*360,vr:(Math.random()-.5)*10,w:6+Math.random()*5,h:10+Math.random()*6,
+      color:colors[Math.floor(Math.random()*colors.length)],life:150+Math.random()*80});
+  }
+}
+function confettiLoop(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{ p.x+=p.vx;p.y+=p.vy;p.rot+=p.vr;p.life--;
+    ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+    ctx.fillStyle=p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore(); });
+  particles=particles.filter(p=>p.life>0 && p.y<canvas.height+40);
+  requestAnimationFrame(confettiLoop);
+}
+confettiLoop();
+document.getElementById('burstBtn').onclick=()=>burstConfetti(160);
+
+/* ---------- AUDIO ---------- */
+let audioCtx=null, playing=false, stopFlag=false;
+const notes=[[262,0.75],[262,0.25],[294,1],[262,1],[349,1],[330,2],[262,0.75],[262,0.25],[294,1],[262,1],[392,1],[349,2],
+  [262,0.75],[262,0.25],[523,1],[440,1],[349,1],[330,1],[294,2],[466,0.75],[466,0.25],[440,1],[349,1],[392,1],[349,2]];
+function playTune(){
+  if(!audioCtx) audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  stopFlag=false; let t=audioCtx.currentTime; const beat=0.32;
+  notes.forEach(([freq,beats])=>{ if(stopFlag) return;
+    const osc=audioCtx.createOscillator(); const gain=audioCtx.createGain();
+    osc.type='sine'; osc.frequency.value=freq;
+    gain.gain.setValueAtTime(0,t); gain.gain.linearRampToValueAtTime(0.18,t+0.03);
+    gain.gain.linearRampToValueAtTime(0,t+beats*beat-0.03);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(t); osc.stop(t+beats*beat); t+=beats*beat; });
+  playing=true;
+  setTimeout(()=>{playing=false;},notes.reduce((a,[,b])=>a+b*0.32,0)*1000+200);
+}
+document.getElementById('musicBtn').onclick=()=>{
+  if(!playing){ playTune(); document.getElementById('musicBtn').textContent='🔊 Playing...'; }
+  else { stopFlag=true; playing=false; }
+  setTimeout(()=>{document.getElementById('musicBtn').textContent='🎵 Play tune';},8000);
+};
+
+/* ---------- COMPLIMENTS (25) ---------- */
+const compliments=[
+"Your smile has a way of making rooms feel warmer.",
+"You notice the little things most people walk past, and that's rare.",
+"You're stronger than the things you've quietly carried.",
+"The way you care for people, even when no one's watching, says everything about who you are.",
+"You make ordinary conversations feel a little more alive.",
+"You have this quiet kind of courage that doesn't need an audience.",
+"You're the kind of person people feel safe being honest with.",
+"Your laugh is genuinely one of the best sounds, no exaggeration.",
+"You carry yourself with a grace that isn't loud, but is unmistakable.",
+"You give people the benefit of the doubt more than you probably should, and it's part of your magic.",
+"You're allowed to take up space. You deserve to be celebrated loudly.",
+"The way you light up talking about things you love is contagious.",
+"You're patient in ways that quietly hold people together.",
+"You're doing better than you give yourself credit for.",
+"Somewhere, someone's day got better just because you were in it.",
+"You ask good questions, the kind that show you're actually listening.",
+"You have a way of making people feel like they matter.",
+"Your curiosity about the world is honestly one of your best qualities.",
+"You don't need to perform to be interesting, you just are.",
+"The effort you put into things people never see still counts, and it shows.",
+"You have impeccable timing for saying exactly what someone needed to hear.",
+"You're someone people quietly look forward to seeing.",
+"Your honesty, even when it's hard to say, is something people trust.",
+"You've grown in ways only the people paying attention would notice.",
+"You are, plainly and without exaggeration, worth celebrating."
+];
+let usedC=[];
+document.getElementById('complimentBtn').onclick=()=>{
+  if(usedC.length===compliments.length) usedC=[];
+  let idx; do{ idx=Math.floor(Math.random()*compliments.length); }while(usedC.includes(idx));
+  usedC.push(idx);
+  const card=document.getElementById('complimentCard');
+  card.classList.remove('show');
+  setTimeout(()=>{ card.textContent=compliments[idx]; card.classList.add('show'); },150);
+  document.getElementById('complimentProgress').textContent=`${usedC.length} / ${compliments.length} truths revealed`;
+};
+
+/* ---------- WISH JAR (20) ---------- */
+const wishes=[
+"May this year bring you exactly the kind of peace you deserve.",
+"Wishing you people around you who see how much you give, and give it back.",
+"May every hard day this year be outnumbered by good ones, ten to one.",
+"Hoping this year hands you a little more of the ease you've earned.",
+"May you keep finding reasons to be proud of yourself, you have plenty.",
+"Wishing you rest that actually feels like rest.",
+"May this year surprise you with something good you didn't see coming.",
+"Hoping you get to feel, at least once this year, exactly how loved you are.",
+"May your confidence grow as fast as everyone else's belief in you already has.",
+"Wishing you a birthday that feels like a warm exhale.",
+"May you say yes to more of the things that quietly excite you.",
+"Wishing you fewer people who take and more who give back in equal measure.",
+"May this year teach you something about yourself that you actually like.",
+"Hoping you laugh, the real, loud, unplanned kind, often this year.",
+"May you find it a little easier to rest without guilt.",
+"Wishing you a slower morning, a good meal, and nothing urgent, soon.",
+"May the people who matter show up for you the way you show up for them.",
+"Hoping this year gives you more reasons to say I'm proud of myself.",
+"May you keep your softness, even as the world asks you not to.",
+"Wishing you a year that finally matches the effort you've been putting in."
+];
+let usedW=[];
+document.getElementById('wishBtn').onclick=()=>{
+  if(usedW.length===wishes.length) usedW=[];
+  let idx; do{ idx=Math.floor(Math.random()*wishes.length); }while(usedW.includes(idx));
+  usedW.push(idx);
+  const card=document.getElementById('wishCard');
+  card.classList.remove('show');
+  setTimeout(()=>{ card.textContent='🎗️ '+wishes[idx]; card.classList.add('show'); },150);
+  document.getElementById('wishProgress').textContent=`${usedW.length} / ${wishes.length} wishes pulled`;
+};
+
+/* ---------- POP GAME ---------- */
+const gcanvas=document.getElementById('gameCanvas'); const gctx=gcanvas.getContext('2d');
+let gameHearts=[]; let score=0;
+document.getElementById('scoreBadge').style.display='block';
+function spawnGameHeart(){
+  gameHearts.push({x:Math.random()*(gcanvas.width-30)+15,y:gcanvas.height+20,r:14+Math.random()*8,
+    vy:0.6+Math.random()*0.9,vx:(Math.random()-.5)*0.6,popped:false,scale:1});
+}
+setInterval(()=>{ if(gameHearts.length<10) spawnGameHeart(); },700);
+function drawHeart(x,y,r,scale){
+  gctx.save(); gctx.translate(x,y); gctx.scale(scale,scale);
+  gctx.beginPath();
+  gctx.moveTo(0,r*0.3);
+  gctx.bezierCurveTo(0,-r*0.4,-r,-r*0.4,-r,r*0.1);
+  gctx.bezierCurveTo(-r,r*0.6,0,r*0.9,0,r*1.3);
+  gctx.bezierCurveTo(0,r*0.9,r,r*0.6,r,r*0.1);
+  gctx.bezierCurveTo(r,-r*0.4,0,-r*0.4,0,r*0.3);
+  gctx.fillStyle='#ff5da2'; gctx.fill(); gctx.restore();
+}
+function gameLoop(){
+  gctx.clearRect(0,0,gcanvas.width,gcanvas.height);
+  gameHearts.forEach(h=>{
+    if(!h.popped){ h.y-=h.vy; h.x+=h.vx; drawHeart(h.x,h.y,h.r,h.scale); }
+    else { h.scale+=0.12; drawHeart(h.x,h.y,h.r,h.scale); h.r-=0.6; }
+  });
+  gameHearts=gameHearts.filter(h=>h.y>-40 && h.r>0);
+  requestAnimationFrame(gameLoop);
+}
+gameLoop();
+gcanvas.addEventListener('click',e=>{
+  const rect=gcanvas.getBoundingClientRect();
+  const scaleX=gcanvas.width/rect.width, scaleY=gcanvas.height/rect.height;
+  const mx=(e.clientX-rect.left)*scaleX, my=(e.clientY-rect.top)*scaleY;
+  gameHearts.forEach(h=>{
+    if(!h.popped){ const d=Math.hypot(mx-h.x,my-(h.y+h.r*0.5));
+      if(d<h.r+8){ h.popped=true; score++; document.getElementById('scoreBadge').textContent='💗 '+score; }
+    }
+  });
+});
+document.getElementById('resetGame').onclick=()=>{ score=0; document.getElementById('scoreBadge').textContent='💗 0'; };
+
+/* ---------- LOVE METER ---------- */
+const loveSlider=document.getElementById('loveSlider'), loveFill=document.getElementById('loveFill'), loveLabel=document.getElementById('loveLabel');
+loveSlider.addEventListener('input',()=>{
+  loveFill.style.width=loveSlider.value+'%';
+  if(loveSlider.value>25 && loveSlider.value<95){
+    loveSlider.value=95; loveFill.style.width='100%';
+    loveLabel.textContent='...it insists on being 100%. Some things just are.';
+    burstConfetti(60);
+  } else if(loveSlider.value>=95){
+    loveFill.style.width='100%'; loveLabel.textContent='Yep. 100%, always.';
+  } else { loveLabel.textContent='keep dragging...'; }
+});
+
+/* ---------- CAKE ---------- */
+document.getElementById('blowBtn').onclick=()=>{
+  document.getElementById('cakeSvg').classList.add('blown');
+  burstConfetti(200); if(!playing) playTune();
+};
+
+/* ---------- LETTER ---------- */
+const letterText=`If you're reading this, it means you made it all the way here, thank you for giving this the twenty-odd minutes it asked for.
+
+I don't know exactly what today looks like for you, or what this past year has held. But I do know that you deserve, at minimum, one day where you're not the one taking care of everyone else.
+
+You've probably done more quiet, uncelebrated good than anyone realizes. The patience you show, the way you check in on people, the effort you put into being someone worth knowing, none of that goes unnoticed, even if it sometimes feels that way.
+
+So today, let yourself be celebrated. Let yourself take up the space you usually give to other people. You've earned a full, unhurried, entirely-about-you kind of day.
+
+Happy birthday. Genuinely, wholeheartedly, happy birthday.`;
+let letterStarted=false, li=0;
+document.getElementById('letterBtn').onclick=()=>{
+  if(letterStarted) return; letterStarted=true;
+  const box=document.getElementById('letterBox');
+  function typeLetter(){
+    if(li<=letterText.length){
+      box.innerHTML=letterText.slice(0,li)+'<span class="letter-cursor">&nbsp;</span>';
+      li++; setTimeout(typeLetter,16);
+    } else { box.textContent=letterText; }
+  }
+  typeLetter();
+};
+
+/* ---------- LOVE BUTTON ---------- */
+document.getElementById('loveBtn').onclick=()=>{
+  for(let i=0;i<30;i++) setTimeout(spawnHeart, i*60);
+  burstConfetti(80);
+};
+</script>
+</body>
+</html>
