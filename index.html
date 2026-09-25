@@ -128,7 +128,7 @@ canvas{position:fixed; inset:0; z-index:5; pointer-events:none;}
 <div class="wrap">
 
 <section id="hero">
-  <div class="eyebrow reveal in">a quiet little page, just for one day</div>
+  <div class="eyebrow reveal in"></div>
   <h1 class="reveal in">🎉 Happy Birthday 🎉</h1>
   <p class="sub reveal in" id="typedSub"></p>
   <div class="timer" id="timer"></div>
@@ -211,28 +211,45 @@ canvas{position:fixed; inset:0; z-index:5; pointer-events:none;}
   </div>
 </section>
 
-<section id="memories">
-  <div class="eyebrow reveal in">a small collection</div>
-  <h2 class="reveal in">Little things worth celebrating</h2>
-  <p class="sub reveal in">Not photos — just a few frames for the kind of moments you deserve more of.</p>
-  <div class="frames">
-    <div class="frame reveal in"><div class="ic">☀️</div>mornings that go your way</div>
-    <div class="frame reveal in"><div class="ic">📚</div>quiet, unhurried time</div>
-    <div class="frame reveal in"><div class="ic">🎶</div>a song that fits the mood exactly</div>
-    <div class="frame reveal in"><div class="ic">🍰</div>dessert that was actually worth it</div>
-    <div class="frame reveal in"><div class="ic">🌷</div>someone noticing the small things</div>
-    <div class="frame reveal in"><div class="ic">🌙</div>a good night's sleep</div>
-  </div>
-</section>
-
 <section id="party">
-  <h2 class="reveal in">🎊 It's a party!</h2>
-  <p class="sub reveal in">This section just wanted an excuse to throw confetti everywhere. You deserve a whole celebration, not just a page — but this is a start.</p>
+  <h2 class="reveal in">🎊 Okay… Now It's Time to Celebrate!</h2>
+
+  <p class="sub reveal in">
+    Because someone this special deserves more than just a birthday wish.
+    This little corner of the page exists for one very important reason —
+    <strong>to celebrate you. ✨</strong>
+  </p>
+
+  <p class="sub reveal in">
+    So forget the serious stuff for a moment.
+    Smile, enjoy the confetti, and let yourself be the center of attention today.
+    You deserve it. 💫
+  </p>
+
   <div class="grid-badges reveal in">
-    <div class="badge">🥳 Kind</div><div class="badge">💫 Bright</div><div class="badge">🌸 Thoughtful</div>
-    <div class="badge">🔥 Strong</div><div class="badge">🎈 One of a kind</div>
+    <div class="badge">🥳 Absolutely Special</div>
+    <div class="badge">✨ One of a Kind</div>
+    <div class="badge">🌸 Beautiful Soul</div>
+    <div class="badge">💫 Simply Wonderful</div>
+    <div class="badge">🎈 Worth Celebrating</div>
   </div>
-  <button class="btn" id="burstBtn">More confetti please</button>
+
+  <div class="party-message reveal in">
+    <span>🎂</span>
+    <h3>And yes… there’s more.</h3>
+    <p>
+      This isn't just a page.<br>
+      It's a tiny celebration made just to make you smile.
+    </p>
+  </div>
+
+  <button class="btn" id="burstBtn">
+    🎉 Make It Rain Confetti
+  </button>
+
+  <p class="tiny-note reveal in">
+    P.S. — You can never have too much confetti on a birthday. 😉
+  </p>
 </section>
 
 <section id="close">
@@ -262,12 +279,23 @@ const io=new IntersectionObserver(entries=>{
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 /* ---------- TYPEWRITER HERO SUB ---------- */
-const subText="Today (well, tomorrow, but who's counting) the world gets to celebrate someone genuinely wonderful. This little page is a slow, quiet way of saying: you matter more than you probably realize. Take your time here, tap everything. It was made to be explored, not rushed.";
+
+const subText="Today is a little more special because it's your birthday. The world gets to celebrate someone genuinely wonderful. This little page is a slow, quiet way of saying: you matter more than you probably realize. Take your time here, tap everything, and explore every little corner. It was made to be explored, not rushed. Happy Birthday! 🎂✨";
+
 let si=0;
+
 function typeSub(){
+
   const el=document.getElementById('typedSub');
-  if(si<=subText.length){ el.textContent=subText.slice(0,si); si++; setTimeout(typeSub,18); }
+
+  if(si<=subText.length){
+    el.textContent=subText.slice(0,si);
+    si++;
+    setTimeout(typeSub,18);
+  }
+
 }
+
 typeSub();
 
 /* ---------- THEME ---------- */
@@ -492,15 +520,24 @@ document.getElementById('blowBtn').onclick=()=>{
 };
 
 /* ---------- LETTER ---------- */
-const letterText=`If you're reading this, it means you made it all the way here, thank you for giving this the twenty-odd minutes it asked for.
 
-I don't know exactly what today looks like for you, or what this past year has held. But I do know that you deserve, at minimum, one day where you're not the one taking care of everyone else.
+const letterText=` You are special. Probably more than you realize.
 
-You've probably done more quiet, uncelebrated good than anyone realizes. The patience you show, the way you check in on people, the effort you put into being someone worth knowing, none of that goes unnoticed, even if it sometimes feels that way.
+Not because of everything you do for everyone else,
+not because you have to be perfect,
+but simply because you are you.
 
-So today, let yourself be celebrated. Let yourself take up the space you usually give to other people. You've earned a full, unhurried, entirely-about-you kind of day.
+So today, celebrate yourself a little more.
+Smile a little wider.
+Make a wish, make a beautiful memory, and enjoy every little moment of this day.
 
-Happy birthday. Genuinely, wholeheartedly, happy birthday.`;
+You deserve all the happiness, love, laughter, and beautiful surprises this year has waiting for you.
+
+Happy birthday to someone who is genuinely special. 🎂❤️
+
+May this year bring you peace, happiness, and countless little moments that make you smile from the heart.
+
+Stay as wonderful as you are. ✨`;
 let letterStarted=false, li=0;
 document.getElementById('letterBtn').onclick=()=>{
   if(letterStarted) return; letterStarted=true;
@@ -521,4 +558,80 @@ document.getElementById('loveBtn').onclick=()=>{
 };
 </script>
 </body>
+<div class="birthday-breaking">
+  <div class="news-ticker">
+    🎂 HAPPY BIRTHDAY 💗 &nbsp;&nbsp;&nbsp;
+    🎉 HAPPY BIRTHDAY 🎉 &nbsp;&nbsp;&nbsp;
+    💕 HAPPY BIRTHDAY 💕
+  </div>
+</div>
+
+<style>
+.birthday-breaking {
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(90deg, #ff1493, #ff69b4, #ff1493);
+  color: white;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 20px rgba(255, 20, 147, 0.35);
+  font-family: Arial, sans-serif;
+}
+
+.news-ticker {
+  white-space: nowrap;
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  animation: birthdayScroll 12s linear infinite;
+}
+
+@keyframes birthdayScroll {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+</style>
+<footer class="special-footer">
+  <div class="heart">♥</div>
+  <p>Made with <span>♥</span> for someone special</p>
+</footer>
+
+<style>
+.special-footer {
+  text-align: center;
+  padding: 35px 20px;
+  background: linear-gradient(135deg, #ff69b4, #ffb6d9);
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  border-radius: 25px 25px 0 0;
+  box-shadow: 0 -5px 25px rgba(255, 105, 180, 0.35);
+}
+
+.special-footer .heart {
+  font-size: 32px;
+  animation: heartbeat 1.3s infinite;
+}
+
+.special-footer p {
+  margin: 8px 0 0;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.special-footer p span {
+  color: #fff;
+  animation: heartbeat 1.3s infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+</style>
+
 </html>
